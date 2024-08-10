@@ -1,11 +1,12 @@
 #include "uart.h"
+#include "kernel/printk.h"
 
 void kernel_main(void)
 {
 	uart_init();
-	uart_send_string("Welcome PanOS!\r\n");
-
+	printk("num is %d, char is %c ....\n", 10, 'a');
+	printk("122141r1\n");
 	while (1) {
-		uart_send(uart_recv());
+		//printk("122141r1\n");
 	}
 }
