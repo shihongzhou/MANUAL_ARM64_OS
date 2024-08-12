@@ -7,7 +7,8 @@ QEMU_FLAGS  += -machine raspi4b
 # -fno-builtin 禁止编译器使用内建函数
 # -nostdinc 此处是禁止编译标准库的头文件 
 # -nostdlib 此处禁止链接标准库 
-COPS += -g -Wall -nostdlib -nostdinc -Iinclude -fno-builtin
+# -O0 编译优化等级，编译器会对可变参数进行编译优化，如果没有切换到EL1的时候调用printk会直接卡死
+COPS += -g -Wall -nostdlib -nostdinc -Iinclude -fno-builtin -mgeneral-regs-only -O0
 ASMOPS = -g -Iinclude 
 
 BOOT_DIR = boot

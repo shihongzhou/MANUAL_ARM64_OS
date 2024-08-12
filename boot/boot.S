@@ -1,4 +1,6 @@
 #include "mm.h"
+#include "asm/sysregs.h"
+
 
 .section  .rodata
 .align 3
@@ -20,17 +22,52 @@ proc_hang:
 master:
 	//打印一下当前特权级
 	bl __init_uart
+
+	mrs x5, CurrentEL
+	cmp x5, #CurrentEL_EL3
+	b.eq el3_entry
+	b el2_entry
+	b el1_entry
+
+el3_entry:
+	eret
+
+el2_entry:
 	bl print_el
 
-	adr	x0, bss_begin
-	adr	x1, bss_end
+	/* 设置bit31 表示el1运行在AArch64模式 */
+	ldr x0, =HCR_HOST_NVHE_FLAGS
+	msr hcr_el2, x0
+
+	/* 关闭MMU */
+	ldr x0, =SCTLR_VALUE_MMU_DISABLED
+	msr sctlr_el1, x0
+
+	/* 设置DAIF */
+	ldr x0, =SPSR_EL1
+	msr spsr_el2, x0
+
+	/* 设置返回地址 */
+	adr x0, el1_entry
+	msr elr_el2, x0
+	
+	eret
+
+el1_entry:
+	bl print_el
+
+	adr	x0, _bss
+	adr	x1, _ebss
 	sub	x1, x1, x0
 	bl 	memzero
 
-	mov	sp, #LOW_MEMORY 
+	mov	sp, #LOW_MEMORY
+	//mov sp_el1, #LOW_MEMORY 
+
 	bl	kernel_main
 	b 	proc_hang		// should never come here
 
+	ret
 
 print_el:
    //防止返回地址被覆盖

@@ -371,5 +371,6 @@ int printk(const char *fmt, ...)
 		if (i > sizeof(print_buf))
 			break;
 	}
+    
 	return len;
 }
