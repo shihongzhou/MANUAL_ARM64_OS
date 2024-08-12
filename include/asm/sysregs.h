@@ -1,3 +1,7 @@
+
+#ifndef ___SYS_REGS__H
+#define ___SYS_REGS__H
+
 #define HCR_RW          (1 << 31)
 
 /* 无虚拟化主机扩展，设置el1运行在AArch64下*/
@@ -18,3 +22,6 @@
 #define CurrentEL_EL1 (1 << 2)
 #define CurrentEL_EL2 (2 << 2)
 #define CurrentEL_EL3 (3 << 2)
+
+
+#endif

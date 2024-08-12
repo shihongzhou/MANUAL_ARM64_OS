@@ -1,5 +1,5 @@
 ARMGNU ?= aarch64-linux-gnu
-QEMU_PWD ?= ../qemu-9.1.0-rc1/build/
+QEMU_PWD ?= 
 board ?= rpi4
 
 COPS += 

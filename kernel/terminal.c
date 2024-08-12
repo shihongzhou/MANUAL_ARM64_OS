@@ -7,6 +7,8 @@
 static char terminal_buffer[1024];
 static uchar switch_line = 1;
 uchar recv_finish = 0;
+extern void trigger_alignment(void);
+
 void process_command(char *input) {
     char *command = strtok(input, " ");
     char *args[10]; // 假设最多支持10个参数
@@ -33,8 +35,9 @@ void process_command(char *input) {
         printk("\n");
     } else if (strcmp(args[0], "help") == 0) {
         printk("Supported commands: echo, help, exit\n");
-    } else {
-        printk("Unknown command: %s\n", args[0]);
+    } else if (strcmp(args[0], "trigger") == 0){
+        printk("trigger instruction exception \n");
+        trigger_alignment();
     }
 }
 
