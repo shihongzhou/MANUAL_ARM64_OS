@@ -4,7 +4,7 @@
 .align 3
 .globl el_string1
 el_string1:
-	.string "Booting at EL"
+	.string "Early uart print: Booting at EL"
 
 .section ".text.boot"
 .globl _start

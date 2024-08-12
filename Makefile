@@ -2,7 +2,7 @@ ARMGNU ?= aarch64-linux-gnu
 QEMU_PWD ?= ../qemu-9.1.0-rc1/build/
 board ?= rpi4
 
-COPS += -DCONFIG_BOARD_PI4B
+COPS += 
 QEMU_FLAGS  += -machine raspi4b
 # -fno-builtin 禁止编译器使用内建函数
 # -nostdinc 此处是禁止编译标准库的头文件 

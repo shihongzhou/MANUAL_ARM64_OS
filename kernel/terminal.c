@@ -12,7 +12,8 @@ void process_command(char *input) {
     char *args[10]; // 假设最多支持10个参数
     int i = 0;
     recv_finish = 0;
-    //此时是一个简单的空格
+
+    //此时是一个简单的换行，无命令
     if(command == NULL) {
         return;
     }
@@ -47,7 +48,7 @@ void shell_terminal(void)
         if(switch_line)
         {
             switch_line = 0;
-            printk("shell>>:");
+            printk("shell>> :");
         }
         tmp = uart_recv();
         switch (tmp)
@@ -63,11 +64,14 @@ void shell_terminal(void)
                 break;
             //处理退格
             case 0x8:
-                uart_send('\b');
-                uart_send(' ');
-                uart_send('\b');
                 *buffer_ptr = 0;
-                if(buffer_ptr != terminal_buffer) buffer_ptr --;
+                if(buffer_ptr != terminal_buffer) 
+                {
+                    uart_send('\b');
+                    uart_send(' ');
+                    uart_send('\b');
+                    buffer_ptr --;
+                }
                 break;
             //常规回显
             default:
