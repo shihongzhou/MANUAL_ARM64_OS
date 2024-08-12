@@ -5,6 +5,8 @@ board ?= rpi4
 COPS += -DCONFIG_BOARD_PI4B
 QEMU_FLAGS  += -machine raspi4b
 # -fno-builtin 禁止编译器使用内建函数
+# -nostdinc 此处是禁止编译标准库的头文件 
+# -nostdlib 此处禁止链接标准库 
 COPS += -g -Wall -nostdlib -nostdinc -Iinclude -fno-builtin
 ASMOPS = -g -Iinclude 
 
@@ -13,7 +15,7 @@ SRC_DIR = src
 KERNEL_DIR = kernel
 LIB_DIR = lib
 
-all : benos.bin
+all : panos.bin
 
 clean :
 	rm -rf $(BUILD_DIR) *.bin 
@@ -57,15 +59,15 @@ OBJ_FILES += $(ASM_FILES:$(SRC_DIR)/%.S=$(BUILD_DIR)/$(SRC_DIR)/%.o)
 # -include $(DEP_FILES)
 
 # 链接生成最终的二进制文件
-benos.bin: $(SRC_DIR)/linker.ld $(OBJ_FILES)
+panos.bin: $(SRC_DIR)/linker.ld $(OBJ_FILES)
 	@echo $(OBJ_FILES)
-	$(ARMGNU)-ld -T $(SRC_DIR)/linker.ld -o $(BUILD_DIR)/benos.elf  $(OBJ_FILES)
-	$(ARMGNU)-objcopy $(BUILD_DIR)/benos.elf -O binary benos.bin
+	$(ARMGNU)-ld -T $(SRC_DIR)/linker.ld -o $(BUILD_DIR)/panos.elf  $(OBJ_FILES)
+	$(ARMGNU)-objcopy $(BUILD_DIR)/panos.elf -O binary panos.bin
 
 # QEMU运行配置
 QEMU_FLAGS  += -nographic
 
 run:
-	$(QEMU_PWD)qemu-system-aarch64 $(QEMU_FLAGS) -kernel benos.bin
+	$(QEMU_PWD)qemu-system-aarch64 $(QEMU_FLAGS) -kernel panos.bin
 debug:
-	$(QEMU_PWD)qemu-system-aarch64 $(QEMU_FLAGS) -kernel benos.bin -S -s
+	$(QEMU_PWD)qemu-system-aarch64 $(QEMU_FLAGS) -kernel panos.bin -S -s
