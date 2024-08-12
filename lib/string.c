@@ -127,3 +127,38 @@ void *memchr(const void *str, int ch, size_t count)
     }
     return ptr;
 }
+
+char *strtok(char *str, const char *delim) {
+    static char *next_token = NULL; // 保存上次的剩余字符串
+    if (str != NULL) {
+        next_token = str; // 如果传入的字符串不为空，则处理该字符串
+    }
+    if (next_token == NULL) {
+        return NULL; // 如果没有更多的字符串，则返回NULL
+    }
+
+    // 跳过前导的分隔符
+    while (*next_token && strchr(delim, *next_token)) {
+        next_token++;
+    }
+
+    if (*next_token == '\0') {
+        return NULL; // 如果已经到达字符串末尾，则返回NULL
+    }
+
+    char *start = next_token;
+
+    // 找到下一个分隔符
+    while (*next_token && !strchr(delim, *next_token)) {
+        next_token++;
+    }
+
+    if (*next_token) {
+        *next_token = '\0'; // 用'\0'替换分隔符，将标记分割开
+        next_token++; // 准备处理下一个标记
+    } else {
+        next_token = NULL; // 如果已到达字符串末尾，则设置为NULL
+    }
+
+    return start;
+}
