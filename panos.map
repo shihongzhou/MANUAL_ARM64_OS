@@ -1,0 +1,264 @@
+
+内存配置
+
+名称           来源             长度             属性
+*default*        0x0000000000000000 0xffffffffffffffff
+
+链结器命令稿和内存映射
+
+                0x0000000000080000                . = 0x80000
+                0x0000000000080000                _text_boot = .
+
+.text.boot      0x0000000000080000       0xe0
+ *(.text.boot)
+ .text.boot     0x0000000000080000       0xe0 build/boot/boot.o
+                0x0000000000080000                _start
+                0x00000000000800e0                _etext_boot = .
+                0x00000000000800e0                _text = .
+
+.text           0x0000000000080800     0x2818
+ *(.text)
+ .text          0x0000000000080800      0x260 build/driver/pl_uart.o
+                0x0000000000080800                uart_send
+                0x0000000000080850                uart_recv
+                0x0000000000080898                uart_send_string
+                0x00000000000808f4                uart_init
+                0x0000000000080a2c                putchar
+ .text          0x0000000000080a60      0x258 build/kernel/exception.o
+                0x0000000000080ab0                parse_esr
+                0x0000000000080c60                bad_mode
+ .text          0x0000000000080cb8       0x24 build/kernel/main.o
+                0x0000000000080cb8                kernel_main
+ .text          0x0000000000080cdc     0x11a0 build/kernel/printk.o
+                0x0000000000081134                myprintf
+                0x0000000000081c9c                init_printk_done
+                0x0000000000081d24                printk
+ .text          0x0000000000081e7c      0x2c0 build/kernel/terminal.o
+                0x0000000000081e7c                process_command
+                0x0000000000081ffc                shell_terminal
+ .text          0x000000000008213c      0x5ac build/lib/string.o
+                0x000000000008213c                strcpy
+                0x000000000008218c                strcat
+                0x00000000000821fc                strlen
+                0x0000000000082240                strcmp
+                0x00000000000822e4                strchr
+                0x000000000008233c                strrchr
+                0x0000000000082398                memcmp
+                0x0000000000082444                memset
+                0x0000000000082498                memcpy
+                0x00000000000824f4                memchr
+                0x000000000008255c                strtok
+ .text          0x00000000000826e8       0x10 build/driver/mm.o
+                0x00000000000826e8                memzero
+ .text          0x00000000000826f8        0x0 build/boot/boot.o
+ .text          0x00000000000826f8       0xe8 build/boot/early_uart.o
+                0x00000000000826f8                __init_uart
+                0x000000000008275c                put_uart
+                0x000000000008277c                put_string_uart
+ *fill*         0x00000000000827e0       0x20 
+ .text          0x0000000000082800      0x818 build/boot/entry.o
+                0x0000000000082800                vectors
+                0x0000000000083004                trigger_alignment
+                0x0000000000083018                _etext = .
+                0x0000000000083018                _rodata = .
+
+.iplt           0x0000000000083018        0x0
+ .iplt          0x0000000000083018        0x0 build/driver/pl_uart.o
+
+.rodata         0x0000000000083018      0x710
+ *(.rodata)
+ .rodata        0x0000000000083018      0x5f5 build/kernel/exception.o
+ *fill*         0x000000000008360d        0x3 
+ .rodata        0x0000000000083610       0x13 build/kernel/main.o
+ *fill*         0x0000000000083623        0x5 
+ .rodata        0x0000000000083628       0x57 build/kernel/printk.o
+ *fill*         0x000000000008367f        0x1 
+ .rodata        0x0000000000083680       0x82 build/kernel/terminal.o
+ *fill*         0x0000000000083702        0x6 
+ .rodata        0x0000000000083708       0x20 build/boot/boot.o
+                0x0000000000083708                el_string1
+                0x0000000000083728                _erodata = .
+                0x0000000000083728                _data = .
+
+.eh_frame       0x0000000000083728      0x308
+ .eh_frame      0x0000000000083728       0xa0 build/driver/pl_uart.o
+ .eh_frame      0x00000000000837c8       0x70 build/kernel/exception.o
+                                         0x88 (松开之前的大小)
+ .eh_frame      0x0000000000083838       0x18 build/kernel/main.o
+                                         0x30 (松开之前的大小)
+ .eh_frame      0x0000000000083850       0x98 build/kernel/printk.o
+                                         0xb0 (松开之前的大小)
+ .eh_frame      0x00000000000838e8       0x38 build/kernel/terminal.o
+                                         0x50 (松开之前的大小)
+ .eh_frame      0x0000000000083920      0x110 build/lib/string.o
+                                        0x128 (松开之前的大小)
+
+.rela.dyn       0x0000000000083a30        0x0
+ .rela.iplt     0x0000000000083a30        0x0 build/driver/pl_uart.o
+ .rela.text.boot
+                0x0000000000083a30        0x0 build/driver/pl_uart.o
+
+.data           0x0000000000083a30        0x1
+ *(.data)
+ .data          0x0000000000083a30        0x0 build/driver/pl_uart.o
+ .data          0x0000000000083a30        0x0 build/kernel/exception.o
+ .data          0x0000000000083a30        0x0 build/kernel/main.o
+ .data          0x0000000000083a30        0x0 build/kernel/printk.o
+ .data          0x0000000000083a30        0x1 build/kernel/terminal.o
+ .data          0x0000000000083a31        0x0 build/lib/string.o
+ .data          0x0000000000083a31        0x0 build/driver/mm.o
+ .data          0x0000000000083a31        0x0 build/boot/boot.o
+ .data          0x0000000000083a31        0x0 build/boot/early_uart.o
+ .data          0x0000000000083a31        0x0 build/boot/entry.o
+                0x0000000000083a31                _edata = .
+
+.igot.plt       0x0000000000083a38        0x0
+ .igot.plt      0x0000000000083a38        0x0 build/driver/pl_uart.o
+
+.data.rel.local
+                0x0000000000083a38      0x3b8
+ .data.rel.local
+                0x0000000000083a38      0x3b0 build/kernel/exception.o
+ .data.rel.local
+                0x0000000000083de8        0x8 build/kernel/printk.o
+
+.data.rel.ro.local
+                0x0000000000083df0       0x20
+ .data.rel.ro.local
+                0x0000000000083df0       0x20 build/kernel/exception.o
+                0x0000000000083e10                . = ALIGN (0x8)
+                0x0000000000083e10                _bss = .
+
+.bss            0x0000000000083e10    0x20820
+ *(.bss*)
+ .bss           0x0000000000083e10        0x0 build/driver/pl_uart.o
+ .bss           0x0000000000083e10        0x0 build/kernel/exception.o
+ .bss           0x0000000000083e10        0x0 build/kernel/main.o
+ .bss           0x0000000000083e10    0x20410 build/kernel/printk.o
+ .bss           0x00000000000a4220      0x408 build/kernel/terminal.o
+                0x00000000000a4220                recv_finish
+ .bss           0x00000000000a4628        0x8 build/lib/string.o
+ .bss           0x00000000000a4630        0x0 build/driver/mm.o
+ .bss           0x00000000000a4630        0x0 build/boot/boot.o
+ .bss           0x00000000000a4630        0x0 build/boot/early_uart.o
+ .bss           0x00000000000a4630        0x0 build/boot/entry.o
+                0x00000000000a4630                _ebss = .
+                0x00000000000a5000                . = ALIGN (0x1000)
+                0x00000000000a5000                init_pg_dir = .
+                0x00000000000a6000                . = (. + 0x1000)
+LOAD build/driver/pl_uart.o
+LOAD build/kernel/exception.o
+LOAD build/kernel/main.o
+LOAD build/kernel/printk.o
+LOAD build/kernel/terminal.o
+LOAD build/lib/string.o
+LOAD build/driver/mm.o
+LOAD build/boot/boot.o
+LOAD build/boot/early_uart.o
+LOAD build/boot/entry.o
+OUTPUT(build/panos.elf elf64-littleaarch64)
+LOAD linker stubs
+
+.debug_info     0x0000000000000000     0x1210
+ .debug_info    0x0000000000000000      0x323 build/driver/pl_uart.o
+ .debug_info    0x0000000000000323      0x363 build/kernel/exception.o
+ .debug_info    0x0000000000000686       0x72 build/kernel/main.o
+ .debug_info    0x00000000000006f8      0x493 build/kernel/printk.o
+ .debug_info    0x0000000000000b8b      0x18e build/kernel/terminal.o
+ .debug_info    0x0000000000000d19      0x43f build/lib/string.o
+ .debug_info    0x0000000000001158       0x2e build/driver/mm.o
+ .debug_info    0x0000000000001186       0x2e build/boot/boot.o
+ .debug_info    0x00000000000011b4       0x2e build/boot/early_uart.o
+ .debug_info    0x00000000000011e2       0x2e build/boot/entry.o
+
+.debug_abbrev   0x0000000000000000      0x66f
+ .debug_abbrev  0x0000000000000000       0xea build/driver/pl_uart.o
+ .debug_abbrev  0x00000000000000ea      0x18c build/kernel/exception.o
+ .debug_abbrev  0x0000000000000276       0x44 build/kernel/main.o
+ .debug_abbrev  0x00000000000002ba      0x1a5 build/kernel/printk.o
+ .debug_abbrev  0x000000000000045f       0xcf build/kernel/terminal.o
+ .debug_abbrev  0x000000000000052e       0xf1 build/lib/string.o
+ .debug_abbrev  0x000000000000061f       0x14 build/driver/mm.o
+ .debug_abbrev  0x0000000000000633       0x14 build/boot/boot.o
+ .debug_abbrev  0x0000000000000647       0x14 build/boot/early_uart.o
+ .debug_abbrev  0x000000000000065b       0x14 build/boot/entry.o
+
+.debug_aranges  0x0000000000000000      0x1e0
+ .debug_aranges
+                0x0000000000000000       0x30 build/driver/pl_uart.o
+ .debug_aranges
+                0x0000000000000030       0x30 build/kernel/exception.o
+ .debug_aranges
+                0x0000000000000060       0x30 build/kernel/main.o
+ .debug_aranges
+                0x0000000000000090       0x30 build/kernel/printk.o
+ .debug_aranges
+                0x00000000000000c0       0x30 build/kernel/terminal.o
+ .debug_aranges
+                0x00000000000000f0       0x30 build/lib/string.o
+ .debug_aranges
+                0x0000000000000120       0x30 build/driver/mm.o
+ .debug_aranges
+                0x0000000000000150       0x30 build/boot/boot.o
+ .debug_aranges
+                0x0000000000000180       0x30 build/boot/early_uart.o
+ .debug_aranges
+                0x00000000000001b0       0x30 build/boot/entry.o
+
+.debug_line     0x0000000000000000      0xbeb
+ .debug_line    0x0000000000000000       0xe3 build/driver/pl_uart.o
+ .debug_line    0x00000000000000e3       0xff build/kernel/exception.o
+ .debug_line    0x00000000000001e2       0x4d build/kernel/main.o
+ .debug_line    0x000000000000022f      0x4c4 build/kernel/printk.o
+ .debug_line    0x00000000000006f3      0x123 build/kernel/terminal.o
+ .debug_line    0x0000000000000816      0x254 build/lib/string.o
+ .debug_line    0x0000000000000a6a       0x40 build/driver/mm.o
+ .debug_line    0x0000000000000aaa       0x6d build/boot/boot.o
+ .debug_line    0x0000000000000b17       0x6b build/boot/early_uart.o
+ .debug_line    0x0000000000000b82       0x69 build/boot/entry.o
+
+.debug_str      0x0000000000000000      0x4db
+ .debug_str     0x0000000000000000      0x10c build/driver/pl_uart.o
+                                        0x11e (松开之前的大小)
+ .debug_str     0x000000000000010c      0x141 build/kernel/exception.o
+                                        0x22d (松开之前的大小)
+ .debug_str     0x000000000000024d       0x1a build/kernel/main.o
+                                        0x128 (松开之前的大小)
+ .debug_str     0x0000000000000267      0x129 build/kernel/printk.o
+                                        0x280 (松开之前的大小)
+ .debug_str     0x0000000000000390       0x75 build/kernel/terminal.o
+                                        0x1a2 (松开之前的大小)
+ .debug_str     0x0000000000000405       0x93 build/lib/string.o
+                                        0x1a6 (松开之前的大小)
+ .debug_str     0x0000000000000498       0x18 build/driver/mm.o
+                                         0x34 (松开之前的大小)
+ .debug_str     0x00000000000004b0        0xc build/boot/boot.o
+                                         0x34 (松开之前的大小)
+ .debug_str     0x00000000000004bc       0x12 build/boot/early_uart.o
+                                         0x3a (松开之前的大小)
+ .debug_str     0x00000000000004ce        0xd build/boot/entry.o
+                                         0x35 (松开之前的大小)
+
+.comment        0x0000000000000000       0x2a
+ .comment       0x0000000000000000       0x2a build/driver/pl_uart.o
+                                         0x2b (松开之前的大小)
+ .comment       0x000000000000002a       0x2b build/kernel/exception.o
+ .comment       0x000000000000002a       0x2b build/kernel/main.o
+ .comment       0x000000000000002a       0x2b build/kernel/printk.o
+ .comment       0x000000000000002a       0x2b build/kernel/terminal.o
+ .comment       0x000000000000002a       0x2b build/lib/string.o
+
+.note.GNU-stack
+                0x0000000000000000        0x0
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/driver/pl_uart.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/kernel/exception.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/kernel/main.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/kernel/printk.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/kernel/terminal.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 build/lib/string.o

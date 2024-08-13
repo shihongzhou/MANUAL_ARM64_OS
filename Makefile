@@ -1,5 +1,5 @@
 ARMGNU ?= aarch64-linux-gnu
-QEMU_PWD ?= 
+QEMU_PWD ?= ../qemu-9.1.0-rc1/build/
 board ?= rpi4
 
 COPS += 
@@ -31,7 +31,6 @@ $(BUILD_DIR)/$(DRIVER_DIR)/%.o: $(DRIVER_DIR)/%.c
 $(BUILD_DIR)/$(KERNEL_DIR)/%.o: $(KERNEL_DIR)/%.c
 	$(shell mkdir -p $(BUILD_DIR)/$(KERNEL_DIR))
 	$(ARMGNU)-gcc $(COPS) -MMD -c $< -o $@
-	
 
 # 编译 lib 目录下的 .c 文件
 $(BUILD_DIR)/$(LIB_DIR)/%.o: $(LIB_DIR)/%.c
@@ -72,7 +71,7 @@ OBJ_FILES += $(BOOT_ASM_FILES:$(BOOT_DIR)/%.S=$(BUILD_DIR)/$(BOOT_DIR)/%.o)
 # 链接生成最终的二进制文件
 panos.bin: linker.ld $(OBJ_FILES)
 	@echo $(OBJ_FILES)
-	$(ARMGNU)-ld -T linker.ld -o $(BUILD_DIR)/panos.elf  $(OBJ_FILES)
+	$(ARMGNU)-ld -T linker.ld -Map panos.map -o $(BUILD_DIR)/panos.elf  $(OBJ_FILES)
 	$(ARMGNU)-objcopy $(BUILD_DIR)/panos.elf -O binary panos.bin
 
 # QEMU运行配置
